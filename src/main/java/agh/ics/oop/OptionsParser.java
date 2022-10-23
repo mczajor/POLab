@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class OptionsParser {
     public static MoveDirection[] parse(String[] args) {
-        ArrayList<MoveDirection> directions = new ArrayList<MoveDirection>();
+        ArrayList<MoveDirection> directions = new ArrayList<>();
         for (String arg : args) {
             switch (arg) {
                 case "f", "forward" -> directions.add(MoveDirection.FORWARD);
