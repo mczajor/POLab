@@ -10,27 +10,27 @@ public class Animal {
     public String toString(){
         return "Pozycja: " + this.position.toString() + "\nOrientacja: " + this.orientation.toString();
     }
+    public MapDirection getOrientation(){
+        return this.orientation;
+    }
     public boolean isAt(Vector2d position){
-        if(this.position.equals(position)){
-            return true;
-        }
-        return false;
+        return this.position.equals(position);
     }
     public void move(MoveDirection direction){
-        switch(direction){
-            case RIGHT:
-                this.orientation = this.orientation.next();
-                break;
-            case LEFT:
-                this.orientation = this.orientation.previous();
-                break;
-            default:
+        switch (direction) {
+            case RIGHT -> this.orientation = this.orientation.next();
+            case LEFT -> this.orientation = this.orientation.previous();
+            default -> {
                 Vector2d unitVector = orientation.toUnitVector();
+                if (direction == MoveDirection.BACKWARD){
+                    unitVector = unitVector.opposite();
+                }
                 Vector2d newposition = this.position.add(unitVector);
                 if (lowerlimit.lowerLeft(newposition).equals(lowerlimit) &&
                         upperlimit.upperRight(newposition).equals(upperlimit)) {
                     position = newposition;
                 }
+            }
         }
     }
 }

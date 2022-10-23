@@ -1,35 +1,20 @@
 package agh.ics.oop;
-
-import java.util.Arrays;
+import java.util.ArrayList;
 
 
 public class OptionsParser {
     public static MoveDirection[] parse(String[] args) {
-        MoveDirection[] directions = new MoveDirection[args.length];
-        int it = 0;
+        ArrayList<MoveDirection> directions = new ArrayList<MoveDirection>();
         for (String arg : args) {
-            switch (arg.charAt(0)) {
-                case 'f':
-                    directions[it] = MoveDirection.FORWARD;
-                    it += 1;
-                    break;
-                case 'b':
-                    directions[it] = MoveDirection.BACKWARD;
-                    it += 1;
-                    break;
-                case 'l':
-                    directions[it] = MoveDirection.LEFT;
-                    it += 1;
-                    break;
-                case 'r':
-                    directions[it] = MoveDirection.RIGHT;
-                    it += 1;
-                    break;
-                default:
-                    break;
+            switch (arg) {
+                case "f", "forward" -> directions.add(MoveDirection.FORWARD);
+                case "b", "backward" -> directions.add(MoveDirection.BACKWARD);
+                case "l", "left" -> directions.add(MoveDirection.LEFT);
+                case "r", "right" -> directions.add(MoveDirection.RIGHT);
+                default -> {
+                }
             }
         }
-        directions = Arrays.stream(directions).filter(item -> (item != null)).toArray(MoveDirection[]::new);
-        return directions;
+        return directions.toArray(new MoveDirection[0]);
     }
 }
