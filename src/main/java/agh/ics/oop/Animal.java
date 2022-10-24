@@ -1,5 +1,5 @@
 package agh.ics.oop;
-
+import java.util.ArrayList;
 
 public class Animal {
     static IWorldMap map;
@@ -37,7 +37,9 @@ public class Animal {
                 }
                 Vector2d newposition = this.position.add(unitVector);
                 if (map.canMoveTo(newposition)){
+                    map.removeAnimal(this.position);
                     this.position = newposition;
+                    map.place(this);
                 }
             }
         }

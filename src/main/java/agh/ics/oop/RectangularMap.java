@@ -14,15 +14,15 @@ public class RectangularMap implements IWorldMap {
     }
     public String toString(){
         MapVisualizer visualizer = new MapVisualizer(this);
-        return visualizer.draw(new Vector2d(0,0), new Vector2d(map.size(), map.get(0).size()));
+        return visualizer.draw(new Vector2d(0,0), new Vector2d(map.size()-1, map.get(0).size()-1));
     }
     @Override
     public boolean canMoveTo(Vector2d position) {
-        return position.follows(new Vector2d(0,0)) && position.precedes(new Vector2d(map.size(), map.get(0).size())) && isOccupied(position);
+        return position.follows(new Vector2d(0,0)) && position.precedes(new Vector2d(map.size()-1, map.get(0).size()-1)) && !isOccupied(position);
     }
     @Override
     public boolean place(Animal animal) {
-        if (!isOccupied(animal.getPosition())){
+        if (canMoveTo(animal.getPosition())){
             map.get(animal.getPosition().x).set(animal.getPosition().y, animal);
             return true;
         }
@@ -34,9 +34,13 @@ public class RectangularMap implements IWorldMap {
     }
     @Override
     public Object objectAt(Vector2d position) {
-        if (position.follows(new Vector2d(0,0)) && position.precedes(new Vector2d(map.size(), map.get(0).size()))){
+        if (position.follows(new Vector2d(0,0)) && position.precedes(new Vector2d(map.size()-1, map.get(0).size()-1))){
             return map.get(position.x).get(position.y);
         }
         return null;
+    }
+    @Override
+    public void removeAnimal(Vector2d position){
+        if (isOccupied(position)){ map.get(position.x).set(position.y, null); }
     }
 }
