@@ -1,8 +1,7 @@
 package agh.ics.oop;
-import java.util.ArrayList;
 
 public class Animal {
-    static IWorldMap map;
+    IWorldMap map;
     private MapDirection orientation = MapDirection.NORTH;
     private Vector2d position;
     public Animal(IWorldMap map, Vector2d initialPosition){

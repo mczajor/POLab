@@ -2,8 +2,8 @@ package agh.ics.oop;
 import java.util.ArrayList;
 
 public class SimulationEngine implements IEngine {
-    private IWorldMap map;
-    private MoveDirection[] directions;
+    private final IWorldMap map;
+    private final MoveDirection[] directions;
     private int numOfAnimals = 0;
     private ArrayList<Animal> animalsOnMap = new ArrayList<>();
 
