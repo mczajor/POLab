@@ -22,10 +22,6 @@ public class GrassField extends AbstractWorldMap {
         }
         return super.toString(lowerBoundry, upperBoundry);
     }
-    @Override
-    public boolean canMoveTo(Vector2d position) {
-        return position.follows(new Vector2d(0,0)) && !isOccupied(position);
-    }
 
     private boolean isGrassAt(Vector2d position){
         for (IMapElement element: map){

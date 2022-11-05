@@ -6,15 +6,14 @@ abstract class AbstractWorldMap implements IWorldMap {
     public AbstractWorldMap(){
         map = new ArrayList<>();
     }
-    public String toString(Vector2d x, Vector2d y){
+    public String toString(Vector2d lowerLeft, Vector2d upperRight){
         MapVisualizer visualizer = new MapVisualizer(this);
-        return visualizer.draw(x, y);
+        return visualizer.draw(lowerLeft, upperRight);
     }
     @Override
     public boolean canMoveTo(Vector2d position) {
-        return position.follows(new Vector2d(0,0)) && position.precedes(new Vector2d(10, 10)) && !isOccupied(position);
+        return !isOccupied(position) && position.follows(new Vector2d(0,0));
     }
-
     @Override
     public boolean place(Animal animal) {
         if (canMoveTo(animal.getPosition())){
