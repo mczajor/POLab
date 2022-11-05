@@ -29,15 +29,18 @@ public class Animal implements IMapElement {
     public boolean isAt(Vector2d position){
         return this.position.equals(position);
     }
+
     public void move(MoveDirection direction){
         switch (direction) {
-            case RIGHT -> this.orientation = this.orientation.next();
-            case LEFT -> this.orientation = this.orientation.previous();
+            case RIGHT -> this.orientation = this.orientation.next(); // rotate right
+            case LEFT -> this.orientation = this.orientation.previous(); //rotate left
             default -> {
                 Vector2d unitVector = orientation.toUnitVector();
+                // need to go opposite of unitvector if direction backwart
                 if (direction == MoveDirection.BACKWARD){
                     unitVector = unitVector.opposite();
                 }
+                // If new position is viable change the vector for a new one
                 Vector2d newposition = this.position.add(unitVector);
                 if (map.canMoveTo(newposition)){
                     map.removeAnimal(this.position);
