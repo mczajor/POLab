@@ -16,41 +16,45 @@ abstract class AbstractWorldMap implements IWorldMap {
     }
 
 
-    /*Checking if the positon is in bounds and whether it's occupied or not*/
+
+    /*Checking if the position is in bounds and whether it's occupied or not*/
     @Override
     public boolean canMoveTo(Vector2d position) {
-        return !isOccupied(position) && position.follows(new Vector2d(0,0));
+        return !isOccupiedByAnimal(position) && position.follows(new Vector2d(0,0));
     }
 
 
     @Override
     public boolean place(Animal animal) {
-        if (canMoveTo(animal.getPosition())){
-            map.add(animal);
-            return true;
+        if (objectAt(animal.getPosition()) instanceof Animal) {
+            return false;
         }
-        return false;
+            return map.add(animal);
     }
 
 
+    // Mostly used in MapVisulaizer since an animal can walk over a grass patch
     @Override
     public boolean isOccupied(Vector2d position) {
         Object object = objectAt(position);
-        return (object instanceof Animal) || (object instanceof Grass);
+        return object != null;
     }
 
 
     @Override
     public Object objectAt(Vector2d position) {
+        IMapElement grass = null;
         for (IMapElement element: map) {
-            if (element.getPosition().equals(position)) {
+            if (element.getPosition().equals(position) && element instanceof Animal) {
                 return element;
+            }else if (element.getPosition().equals(position)){
+                grass = element;
             }
         }
-        return null;
+        return grass;
     }
 
-    /*Checking whether position has and animal and removing it, there can only by one animal in one spot*/
+    /*Checking whether position has and animal and removing it, there can only be one animal in one spot*/
     @Override
     public void removeAnimal(Vector2d position){
         for (IMapElement element: map){
@@ -59,6 +63,14 @@ abstract class AbstractWorldMap implements IWorldMap {
                 break;
             }
         }
+    }
+    protected boolean isOccupiedByAnimal(Vector2d position){
+        for (IMapElement element: map){
+            if (element.getPosition().equals(position) && element instanceof Animal){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

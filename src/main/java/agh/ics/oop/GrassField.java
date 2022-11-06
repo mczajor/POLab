@@ -2,16 +2,12 @@ package agh.ics.oop;
 import java.lang.Math;
 
 public class GrassField extends AbstractWorldMap {
-
-    // Grass is placed randomly withing (0,0) - (sqrt(n*10), sqrt(n*10)) bounds
+    final private int grassCount;
     public GrassField(int n){
         super();
-        Vector2d position = new Vector2d((int)(Math.random()*Math.sqrt(n*10)), (int)(Math.random()*Math.sqrt(n*10)));
+        this.grassCount = n;
         for (int i = 0; i < n; i++){
-            map.add(new Grass(position));
-            do{
-                position = new Vector2d((int)(Math.random()*Math.sqrt(n*10)), (int)(Math.random()*Math.sqrt(n*10)));
-            }while(isGrassAt(position));
+            this.placeGrass();
         }
     }
 
@@ -25,14 +21,21 @@ public class GrassField extends AbstractWorldMap {
         }
         return super.toString(lowerBoundry, upperBoundry);
     }
-
-    //Check just for grass so that they can't be placed on top of each other
-    private boolean isGrassAt(Vector2d position){
-        for (IMapElement element: map){
-            if (element.getPosition().equals(position) && element instanceof Grass){
-                return true;
-            }
+    //Remove grass and place new one if animal steps on it
+    public boolean place(Animal animal){
+        if(objectAt(animal.getPosition()) instanceof Grass){
+            map.remove(objectAt(animal.getPosition()));
+            placeGrass();
         }
-        return false;
+        return super.place(animal);
     }
+    // Place grass randomly within (0,0) and (sqrt(grassCount*10), sqrt(grassCount*10))
+    private boolean placeGrass(){
+        Vector2d position;
+        do{
+            position = new Vector2d((int)(Math.random()*Math.sqrt(this.grassCount*10)), (int)(Math.random()*Math.sqrt(this.grassCount*10)));
+        }while(isOccupied(position));
+        return map.add(new Grass(position));
+    }
+
 }
