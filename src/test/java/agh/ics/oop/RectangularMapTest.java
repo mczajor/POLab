@@ -14,25 +14,13 @@ class RectangularMapTest {
     }
 
     @Test
-    void OneAnimalTest(){
-        String[] args = {"f", "f", "f","f","f","f", "r", "f", "f", "r","b", "b"};
-        MoveDirection[] directions = OptionsParser.parse(args);
-        Vector2d[] positions = {new Vector2d(2, 2)};
-        IEngine engine = new SimulationEngine(directions, map, positions);
-        engine.run();
-        assertTrue(map.isOccupied(new Vector2d(4, 5)));
-    }
-
-    @Test
-    void MultipleAnimalTest(){
-        String[] args = {"r", "l", "f", "f", "f", "f", "f", "f", "r",
-                "r", "f", "b", "f", "b", "f", "b", "f", "b"};
-        MoveDirection[] directions = OptionsParser.parse(args);
-        Vector2d[] positions = {new Vector2d(2, 2), new Vector2d(3, 2), new Vector2d(2,2)};
-        IEngine engine = new SimulationEngine(directions, map, positions);
-        engine.run();
-        assertTrue( map.isOccupied(new Vector2d(2, 0)));
-        assertTrue( map.isOccupied(new Vector2d(3, 0)));
+    void IWorldMapTest(){
+        Animal animal = new Animal(map, new Vector2d(2, 2));
+        map.place(animal);
+        map.place(new Animal(map, new Vector2d(3, 2)));
+        assertTrue(map.isOccupied(new Vector2d(2, 2)));
+        assertFalse(map.canMoveTo(new Vector2d(2, 2)));
+        assertEquals(animal, map.objectAt(new Vector2d(2, 2)));
     }
 
 }
