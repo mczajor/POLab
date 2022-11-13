@@ -1,7 +1,5 @@
 package agh.ics.oop;
 import java.lang.Math;
-import java.util.HashMap;
-import java.util.Map;
 
 public class GrassField extends AbstractWorldMap {
     final private int grassCount;

@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SimulationEngineTest {
 
-    IWorldMap map;
+    AbstractWorldMap map;
     @BeforeEach
     void construct(){
         map = new RectangularMap(10, 5);

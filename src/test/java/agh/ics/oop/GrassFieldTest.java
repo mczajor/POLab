@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GrassFieldTest {
 
-    IWorldMap map;
+    AbstractWorldMap map;
     @BeforeEach
     void construct(){
         map = new GrassField(10);
