@@ -1,7 +1,9 @@
 package agh.ics.oop;
+import java.util.ArrayList;
 
 public class Animal implements IMapElement {
     IWorldMap map;
+    ArrayList<IPositionChangeObserver> observers = new ArrayList<>();
     private MapDirection orientation = MapDirection.NORTH;
     private Vector2d position;
     public Animal(IWorldMap map){
@@ -29,7 +31,6 @@ public class Animal implements IMapElement {
     public boolean isAt(Vector2d position){
         return this.position.equals(position);
     }
-
     public void move(MoveDirection direction){
         switch (direction) {
             case RIGHT -> this.orientation = this.orientation.next(); // rotate right
@@ -49,5 +50,11 @@ public class Animal implements IMapElement {
                 }
             }
         }
+    }
+    void addObserver(IPositionChangeObserver observer){
+        this.observers.add(observer);
+    }
+    void removeObserver(IPositionChangeObserver observer){
+        this.observers.remove(observer);
     }
 }

@@ -1,5 +1,7 @@
 package agh.ics.oop;
 import java.lang.Math;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GrassField extends AbstractWorldMap {
     final private int grassCount;
@@ -13,18 +15,19 @@ public class GrassField extends AbstractWorldMap {
 
     //Choose only relevant parts of the map, shows every animal and patch of grass
     public String toString(){
-        Vector2d upperBoundry = map.get(0).getPosition();
-        Vector2d lowerBoundry = map.get(0).getPosition();
-        for(IMapElement element: map){
-            upperBoundry = upperBoundry.upperRight(element.getPosition());
-            lowerBoundry = lowerBoundry.lowerLeft(element.getPosition());
+        Vector2d entry = map.keySet().iterator().next();
+        Vector2d upperBoundry = entry;
+        Vector2d lowerBoundry = entry;
+        for(Vector2d element: map.keySet()){
+            upperBoundry = upperBoundry.upperRight(element);
+            lowerBoundry = lowerBoundry.lowerLeft(element);
         }
         return super.toString(lowerBoundry, upperBoundry);
     }
     //Remove grass and place new one if animal steps on it
     public boolean place(Animal animal){
         if(objectAt(animal.getPosition()) instanceof Grass){
-            map.remove(objectAt(animal.getPosition()));
+            map.remove(animal.getPosition());
             placeGrass();
         }
         return super.place(animal);
@@ -35,7 +38,7 @@ public class GrassField extends AbstractWorldMap {
         do{
             position = new Vector2d((int)(Math.random()*Math.sqrt(this.grassCount*10)), (int)(Math.random()*Math.sqrt(this.grassCount*10)));
         }while(isOccupied(position));
-        return map.add(new Grass(position));
+        return map.put(position, new Grass(position)) == null;
     }
 
 }
