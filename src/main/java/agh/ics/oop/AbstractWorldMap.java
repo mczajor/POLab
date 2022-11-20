@@ -1,11 +1,13 @@
 package agh.ics.oop;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
+public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
     /* Storing all elements in HashMap */
-    protected Map<Vector2d, IMapElement> map;
+    protected final Map<Vector2d, IMapElement> map;
     public AbstractWorldMap(){
         map = new HashMap<>();
     }
@@ -19,12 +21,15 @@ abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     /*Checking if the position is in bounds and whether it's occupied or not*/
     @Override
     public boolean canMoveTo(Vector2d position) {
-        return !isOccupiedByAnimal(position) && position.follows(new Vector2d(0,0));
+        return !isOccupiedByAnimal(position);
     }
 
     @Override
     public boolean place(Animal animal) {
-        return map.put(animal.getPosition(), animal) == null;
+        if (map.get(animal.getPosition()) instanceof Animal){
+            return false;
+        }
+        return !(map.put(animal.getPosition(), animal) instanceof Animal);
     }
 
     // Mostly used in MapVisulaizer since an animal can walk over a grass patch
@@ -46,12 +51,17 @@ abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
-        map.put(newPosition, objectAt(oldPosition));
+        IMapElement element = objectAt(oldPosition);
         map.remove(oldPosition);
+        map.put(newPosition, element);
     }
 
     protected boolean isOccupiedByAnimal(Vector2d position){
         return objectAt(position) instanceof Animal;
+    }
+    public IMapElement[] getObjects(){
+        List<IMapElement> objects = new ArrayList<>(map.values());
+        return objects.toArray(new IMapElement[0]);
     }
 }
 
