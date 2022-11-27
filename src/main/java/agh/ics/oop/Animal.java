@@ -1,4 +1,8 @@
 package agh.ics.oop;
+import javafx.scene.image.Image;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class Animal implements IMapElement {
@@ -51,6 +55,10 @@ public class Animal implements IMapElement {
             }
         }
     }
+    @Override
+    public Image getImage() throws FileNotFoundException {
+        return new Image(new FileInputStream("src/main/resources/" + this.toString() + ".png"));
+        }
     void addObserver(IPositionChangeObserver observer){
         this.observers.add(observer);
     }

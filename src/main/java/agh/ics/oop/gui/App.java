@@ -7,20 +7,23 @@ import javafx.scene.Scene;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 
 public class App extends Application {
     private GrassField map;
+    private MyGrid grid;
+    private SimulationEngine engine;
     public void init(){
         String[] args = getParameters().getRaw().toArray(new String[0]);
+        this.grid = new MyGrid();
         MoveDirection[] directions;
         map = new GrassField(10);
         Vector2d[] positions = {new Vector2d(2, 2), new Vector2d(2, 3)};
-        SimulationEngine engine;
         try {
             directions = OptionsParser.parse(args);
-            engine = new SimulationEngine(directions, map, positions);
+            engine = new SimulationEngine(directions, map, positions, grid);
         } catch (IllegalArgumentException exeption){
             System.err.println(exeption.getMessage());
             return;
@@ -34,13 +37,11 @@ public class App extends Application {
         Vector2d[] corners = map.getBoundary();
         int width = corners[1].x - corners[0].x + 1;
         int height = corners[1].y - corners[0].y + 1;
-        GridPane grid = new GridPane();
-        grid.setGridLinesVisible(true);
         for (int i=0; i<=width; i++){
-            grid.getColumnConstraints().add(new ColumnConstraints(20));
+            grid.getColumnConstraints().add(new ColumnConstraints(30));
         }
         for (int i=0; i<=height; i++){
-            grid.getRowConstraints().add(new RowConstraints(20));
+            grid.getRowConstraints().add(new RowConstraints(30));
         }
         for (int i = 0; i < width; i++) {
             grid.add(new Label(" " + (corners[0].x+i)), i+1, 0);
@@ -50,7 +51,7 @@ public class App extends Application {
         }
         grid.add(new Label("y/x"), 0 ,0);
         for (IMapElement element : elements){
-            Label temp = new Label(element.toString());
+            VBox temp = new GuiElementBox(element).vBox;
             grid.add(temp, element.getPosition().x - corners[0].x + 1,
                     corners[1].y - element.getPosition().y + 1);
             GridPane.setHalignment(temp, HPos.CENTER);
