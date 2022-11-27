@@ -3,9 +3,13 @@ import javafx.scene.image.Image;
 import java.io.FileNotFoundException;
 
 public class Grass implements IMapElement {
-    final private Vector2d position;
+    private Vector2d position;
     public Grass(Vector2d position){
         this.position = position;
+    }
+    @Override
+    public void changePosition(Vector2d newPosition){
+        this.position = newPosition;
     }
     public Vector2d getPosition(){
         return this.position;

@@ -1,63 +1,34 @@
 package agh.ics.oop.gui;
 import agh.ics.oop.*;
 import javafx.application.Application;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.control.Label;
 
 public class App extends Application {
-    private GrassField map;
+    private final int CELL_SIZE = 30;
     private MyGrid grid;
-    private SimulationEngine engine;
+    private Thread thread;
     public void init(){
         String[] args = getParameters().getRaw().toArray(new String[0]);
-        this.grid = new MyGrid();
         MoveDirection[] directions;
-        map = new GrassField(10);
+        GrassField map = new GrassField(10);
+        this.grid = new MyGrid(map, CELL_SIZE);
         Vector2d[] positions = {new Vector2d(2, 2), new Vector2d(2, 3)};
+        SimulationEngine engine;
         try {
             directions = OptionsParser.parse(args);
-            engine = new SimulationEngine(directions, map, positions, grid);
-        } catch (IllegalArgumentException exeption){
+            engine = new SimulationEngine(directions, map, positions, grid, 500);
+            thread = new Thread(engine);
+        } catch (IllegalArgumentException exeption) {
             System.err.println(exeption.getMessage());
-            return;
+            System.exit(1);
         }
-        engine.run();
+
     }
 
-
     public void start(Stage primaryStage){
-        IMapElement[] elements = map.getObjects();
-        Vector2d[] corners = map.getBoundary();
-        int width = corners[1].x - corners[0].x + 1;
-        int height = corners[1].y - corners[0].y + 1;
-        for (int i=0; i<=width; i++){
-            grid.getColumnConstraints().add(new ColumnConstraints(30));
-        }
-        for (int i=0; i<=height; i++){
-            grid.getRowConstraints().add(new RowConstraints(30));
-        }
-        for (int i = 0; i < width; i++) {
-            grid.add(new Label(" " + (corners[0].x+i)), i+1, 0);
-        }
-        for (int i = 0; i < height; i++){
-            grid.add(new Label(" " + (corners[1].y-i)), 0, i+1);
-        }
-        grid.add(new Label("y/x"), 0 ,0);
-        for (IMapElement element : elements){
-            VBox temp = new GuiElementBox(element).vBox;
-            grid.add(temp, element.getPosition().x - corners[0].x + 1,
-                    corners[1].y - element.getPosition().y + 1);
-            GridPane.setHalignment(temp, HPos.CENTER);
-            GridPane.setValignment(temp, VPos.CENTER);
-        }
-        Scene scene = new Scene(grid, width*40, height*40);
+        thread.start();
+        Scene scene = new Scene(grid, grid.width*(CELL_SIZE+10), grid.height*(CELL_SIZE+10));
         primaryStage.setScene(scene);
         primaryStage.show();
     }

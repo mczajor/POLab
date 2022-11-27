@@ -21,4 +21,8 @@ public class RectangularMap extends AbstractWorldMap {
         }
         return false;
     }
+    @Override
+    protected void moveGrass(Vector2d oldPosition){
+        return;
+    }
 }

@@ -12,11 +12,17 @@ public class Animal implements IMapElement {
     private Vector2d position;
     public Animal(AbstractWorldMap map){
         this.map = map;
+        this.addObserver(map);
         this.position = new Vector2d(0,0);
     }
     public Animal(AbstractWorldMap map, Vector2d initialPosition){
         this.position = initialPosition;
         this.map = map;
+        this.addObserver(map);
+    }
+    @Override
+    public void changePosition(Vector2d newPosition){
+        this.position = newPosition;
     }
     public String toString(){
         return switch(this.orientation){
@@ -29,6 +35,7 @@ public class Animal implements IMapElement {
     public MapDirection getOrientation(){
         return this.orientation;
     }
+    //@Override
     public Vector2d getPosition(){
         return this.position;
     }
@@ -47,10 +54,13 @@ public class Animal implements IMapElement {
                 }
                 // If new position is viable change the vector for a new one
                 Vector2d newPosition = this.position.add(unitVector);
-                if (map.canMoveTo(newPosition)){
+                if (map.objectAt(newPosition) instanceof Grass){
+                    map.moveGrass(newPosition);
+                }
+                if (map.objectAt(newPosition) == null){
                     Vector2d oldPosition = this.position;
-                    this.position = newPosition;
                     this.positionChanged(oldPosition, newPosition);
+                    this.position = newPosition;
                 }
             }
         }

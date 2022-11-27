@@ -5,8 +5,7 @@ import agh.ics.oop.*;
 import javafx.scene.layout.VBox;
 import java.io.FileNotFoundException;
 
-public class GuiElementBox {
-    VBox vBox = new VBox();
+public class GuiElementBox extends VBox {
     public GuiElementBox(IMapElement element) {
         try {
             ImageView imageView = new ImageView();
@@ -14,9 +13,9 @@ public class GuiElementBox {
             imageView.setFitHeight(20);
             imageView.setFitWidth(20);
             Label label = new Label(element.getPosition().toString());
-            vBox.getChildren().addAll(imageView, label);
-            vBox.setAlignment(javafx.geometry.Pos.CENTER);
-            vBox.setSpacing(0.005);
+            this.getChildren().addAll(imageView, label);
+            this.setAlignment(javafx.geometry.Pos.CENTER);
+            this.setSpacing(0.005);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

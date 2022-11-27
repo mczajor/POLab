@@ -8,7 +8,9 @@ public class GrassField extends AbstractWorldMap {
         super();
         this.grassCount = n;
         for (int i = 0; i < n; i++){
-            this.placeGrass();
+            Vector2d position = placeGrass();
+            map.put(position, new Grass(position));
+            boundary.add(position);
         }
     }
     //Choose only relevant parts of the map, shows every animal and patch of grass
@@ -19,8 +21,9 @@ public class GrassField extends AbstractWorldMap {
     //Remove grass and place new one if animal steps on it
     public boolean place(Animal animal){
         if(objectAt(animal.getPosition()) instanceof Grass){
-            boundary.remove(animal.getPosition());
-            placeGrass();
+            Vector2d position = placeGrass();
+            this.positionChanged(animal.getPosition(), position);
+            boundary.positionChanged(animal.getPosition(), position);
         }
         if (super.place(animal)){
             boundary.add(animal.getPosition());
@@ -29,15 +32,25 @@ public class GrassField extends AbstractWorldMap {
         return false;
     }
     // Place grass randomly within (0,0) and (sqrt(grassCount*10), sqrt(grassCount*10))
-    private boolean placeGrass(){
+    protected Vector2d placeGrass(){
         Vector2d position;
         do{
             position = new Vector2d((int)(Math.random()*Math.sqrt(this.grassCount*10)), (int)(Math.random()*Math.sqrt(this.grassCount*10)));
         }while(isOccupied(position));
-        boundary.add(position);
-        return map.put(position, new Grass(position)) == null;
+        return position;
+    }
+    protected void moveGrass(Vector2d oldPosition){
+        Vector2d newPosition = placeGrass();
+        super.objectAt(oldPosition).changePosition(newPosition);
+        this.positionChanged(oldPosition, newPosition);
     }
     public Vector2d[] getBoundary(){
+        System.out.println(this.boundary.lowerLeft().toString() + " " + this.boundary.upperRight().toString());
         return new Vector2d[]{this.boundary.lowerLeft(), this.boundary.upperRight()};
+    }
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+        super.positionChanged(oldPosition, newPosition);
+        boundary.positionChanged(oldPosition, newPosition);
     }
 }

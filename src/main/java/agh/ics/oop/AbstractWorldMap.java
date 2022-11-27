@@ -52,6 +52,9 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
         IMapElement element = objectAt(oldPosition);
+        if (objectAt(newPosition) instanceof Animal){
+            throw new IllegalArgumentException("Position " + newPosition + " is already occupied");
+        }
         map.remove(oldPosition);
         map.put(newPosition, element);
     }
@@ -63,5 +66,6 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         List<IMapElement> objects = new ArrayList<>(map.values());
         return objects.toArray(new IMapElement[0]);
     }
+    abstract protected void moveGrass(Vector2d oldPosition); // This method is implemented in GrassField.java
 }
 
