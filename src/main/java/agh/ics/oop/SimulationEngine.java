@@ -36,7 +36,10 @@ public class SimulationEngine implements IEngine, Runnable {
             System.out.println(direction.toString());
             animalsOnMap.get(i%numOfAnimals).move(direction);
             i++;
-            Platform.runLater(grid::draw);
+            Platform.runLater(()->{
+                grid.getChildren().clear();
+                grid.draw();
+            });
 
         }
     }

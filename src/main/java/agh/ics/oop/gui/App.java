@@ -28,7 +28,7 @@ public class App extends Application {
 
     public void start(Stage primaryStage){
         thread.start();
-        Scene scene = new Scene(grid, grid.width*(CELL_SIZE+10), grid.height*(CELL_SIZE+10));
+        Scene scene = new Scene(grid, grid.width*(CELL_SIZE), grid.height*(CELL_SIZE));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
