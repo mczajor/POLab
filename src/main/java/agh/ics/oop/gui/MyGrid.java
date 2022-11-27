@@ -23,6 +23,8 @@ public class MyGrid extends GridPane {
         Vector2d[] corners = map.getBoundary();
         width = corners[1].x - corners[0].x + 1;
         height = corners[1].y - corners[0].y + 1;
+        this.getRowConstraints().add(new RowConstraints(20));
+        this.getColumnConstraints().add(new ColumnConstraints(20));
         for (int i = 0; i < width; i++) {
             this.getColumnConstraints().add(new ColumnConstraints(CELL_SIZE));
             this.add(new Label(" " + (corners[0].x+i)), i+1, 0);
@@ -31,11 +33,8 @@ public class MyGrid extends GridPane {
             this.getRowConstraints().add(new RowConstraints(CELL_SIZE));
             this.add(new Label(" " + (corners[1].y-i)), 0, i+1);
         }
-
-        this.setGridLinesVisible(true);
-        this.getRowConstraints().add(new RowConstraints(CELL_SIZE));
-        this.getColumnConstraints().add(new ColumnConstraints(CELL_SIZE));
         this.add(new Label("y/x"), 0 ,0);
+        this.setGridLinesVisible(true);
         for (IMapElement element : elements){
             VBox temp = new GuiElementBox(element);
             this.add(temp, element.getPosition().x - corners[0].x + 1,
